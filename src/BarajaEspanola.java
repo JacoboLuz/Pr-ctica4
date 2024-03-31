@@ -1,9 +1,12 @@
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 public class BarajaEspanola extends JPanel{
     private BufferedImage[] imagenesNaipes;
@@ -11,7 +14,7 @@ public class BarajaEspanola extends JPanel{
     private static int alto=319;
 
     public BarajaEspanola(){
-        cargarImagenes();
+        this.cargarImagenes();
     }
 /**/
     public static int getAncho() {
@@ -29,7 +32,7 @@ public class BarajaEspanola extends JPanel{
     }
 /**/
     private void cargarImagenes(){
-        imagenesNaipes=new BufferedImage[12 * 4];
+        imagenesNaipes=new BufferedImage[48];
         String[] palos={"oros","copas","espadas","bastos"};
         for(int i=0;i<4;i++){
             for (int j=0;j<12;j++){
@@ -37,19 +40,21 @@ public class BarajaEspanola extends JPanel{
                 try{
                     BufferedImage imagen=ImageIO.read(new File(nombreImagen));
                     imagenesNaipes[i*12+j]=imagen;
-                }catch(IOException e){
-                    e.printStackTrace();
+                }catch(IOException error){
+                    error.printStackTrace();
                 }
             }
         }
     }
 
-    @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);
         int x=10;
         int y=10;
-        for(BufferedImage imagen:imagenesNaipes){
+        BufferedImage[] var4 = this.imagenesNaipes;
+        int var5 = var4.length;
+        for(int var6 = 0; var6 < var5; ++var6){
+            BufferedImage imagen = var4[var6];
             g.drawImage(imagen,x,y,ancho,alto,this);
             x +=ancho+10;
             if(x>getWidth()-ancho){
@@ -59,7 +64,6 @@ public class BarajaEspanola extends JPanel{
         }
     }
 
-    @Override
     public Dimension getPreferredSize(){
         int an=(ancho+10)*12/2;
         int al=(alto+10)*4/2;
@@ -69,7 +73,7 @@ public class BarajaEspanola extends JPanel{
     public static void main(String[] args){
         SwingUtilities.invokeLater(()->{
             JFrame frame=new JFrame("Baraja Española");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(3);
             BarajaEspanola panel=new BarajaEspanola();
             frame.add(panel);
             frame.pack();
